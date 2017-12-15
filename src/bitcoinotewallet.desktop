@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bitcoinote Wallet
+Comment=Bitcoinote wallet
+Exec=bitcoinotewallet %U
+Terminal=false
+Type=Application
+Icon=bitcoinote
+MimeType=x-scheme-handler/bitcoinote;
+Categories=Office;Finance;
