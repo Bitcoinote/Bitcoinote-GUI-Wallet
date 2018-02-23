@@ -67,7 +67,7 @@ CryptoNote::NetNodeConfig makeNetNodeConfig() {
   boost::any p2pBindPort = static_cast<uint16_t>(Settings::instance().getP2pBindPort());
   boost::any p2pExternalPort = static_cast<uint16_t>(Settings::instance().getP2pExternalPort());
   boost::any p2pAllowLocalIp = Settings::instance().hasAllowLocalIpOption();
-  boost::any dataDir = Settings::instance().getDataDir().absolutePath().toStdString();
+  std::string dataDir = Settings::instance().getDataDir().absolutePath().toLocal8Bit().constData();
   boost::any hideMyPort = Settings::instance().hasHideMyPortOption();
   options.insert(std::make_pair("p2p-bind-ip", boost::program_options::variable_value(p2pBindIp, false)));
   options.insert(std::make_pair("p2p-bind-port", boost::program_options::variable_value(p2pBindPort, false)));
@@ -292,14 +292,14 @@ INodeAdapter::InitStatus InProcessNodeWorker::initCore() {
 
     CryptoNote::DataBaseConfig dbConfig;
 
-    dbConfig.setDataDir(Settings::instance().getDataDir().absolutePath().toStdString());
+    dbConfig.setDataDir(Settings::instance().getDataDir().absolutePath().toLocal8Bit().constData());
     dbConfig.setReadCacheSize(128 * 1024 * 1024);
     dbConfig.setWriteBufferSize(256 * 1024 * 1024);
     dbConfig.setTestnet(Settings::instance().isTestnet());
 
     QString blocksFilePath = Settings::instance().getDataDir().absoluteFilePath(QString::fromStdString(m_currency.blocksFileName()));
     QString indexesFilePath = Settings::instance().getDataDir().absoluteFilePath(QString::fromStdString(m_currency.blockIndexesFileName()));
-    std::unique_ptr<CryptoNote::IMainChainStorage> mainChainStorage(new CryptoNote::MainChainStorage(blocksFilePath.toStdString(), indexesFilePath.toStdString()));
+    std::unique_ptr<CryptoNote::IMainChainStorage> mainChainStorage(new CryptoNote::MainChainStorage(blocksFilePath.toLocal8Bit().constData(), indexesFilePath.toLocal8Bit().constData()));
     if (mainChainStorage->getBlockCount() == 0) {
       CryptoNote::RawBlock genesis;
       genesis.block = CryptoNote::toBinaryArray(m_currency.genesisBlock());

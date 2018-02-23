@@ -34,8 +34,8 @@ namespace WalletGui {
 namespace {
 
 const char BLOG_RSS_SCHEME[] = "https";
-const char BLOG_RSS_HOST[] = "bitcoinote.org";
-const char BLOG_RSS_PATH[] = "/blog/feed.atom/";
+const char BLOG_RSS_HOST[] = "github.com";
+const char BLOG_RSS_PATH[] = "/Bitcoinote/Bitcoinote-GUI-Wallet/releases.atom";
 
 const char BLOG_RSS_ID_TAG_NAME[] = "id";
 const char BLOG_RSS_LINK_TAG_NAME[] = "link";
@@ -58,7 +58,7 @@ BlogReader::~BlogReader() {
 }
 
 QString BlogReader::getName() const {
-  return tr("Bitcoinote Blog:");
+  return tr("BitcoiNote Updates:");
 }
 
 QPixmap BlogReader::getIcon() const {
@@ -221,6 +221,10 @@ void BlogReader::processBlogReplyData(const QString& _data) {
             messageItem.messageId = xml.readElementText();
           } else if(!xml.name().compare(BLOG_RSS_LINK_TAG_NAME)) {
             messageItem.messageSourceUrl = xml.attributes().value(BLOG_RSS_LINK_HREF_ATTRIBUTE_NAME).toString();
+            // Handle root-relative path
+            if(!messageItem.messageSourceUrl.length() || messageItem.messageSourceUrl.at(0).toLatin1() == '/') {
+              messageItem.messageSourceUrl = QString(BLOG_RSS_SCHEME) + QString("://") + QString(BLOG_RSS_HOST) + messageItem.messageSourceUrl;
+            }
           } else if(!xml.name().compare(BLOG_RSS_TITLE_TAG_NAME)) {
             messageItem.messageTitle = xml.readElementText();
           } else if(!xml.name().compare(BLOG_RSS_CONTENT_TAG_NAME)) {

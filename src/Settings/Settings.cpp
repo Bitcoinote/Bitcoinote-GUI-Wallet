@@ -70,7 +70,7 @@ const quint64 DEFAULT_OPTIMIZATION_THRESHOLD = 10000000000000;
 const quint64 DEFAULT_OPTIMIZATION_MIXIN = 6;
 
 const quint64 VERSION_MAJOR = 1;
-const quint64 VERSION_MINOR = 0;
+const quint64 VERSION_MINOR = 1;
 const quint64 VERSION_PATCH = 0;
 
 }
@@ -367,11 +367,11 @@ quint64 Settings::getOptimizationMixin() const {
 bool Settings::isNewsEnabled() const {
   QReadLocker lock(&m_lock);
   if (!m_settings.contains(OPTION_PRIVACY_PARAMS)) {
-    return false;
+    return true;
   }
 
   QJsonObject privacyParams = m_settings.value(OPTION_PRIVACY_PARAMS).toObject();
-  return privacyParams.contains(OPTION_PRIVACY_NEWS_ENABLED) ? privacyParams.value(OPTION_PRIVACY_NEWS_ENABLED).toBool() : false;
+  return privacyParams.contains(OPTION_PRIVACY_NEWS_ENABLED) ? privacyParams.value(OPTION_PRIVACY_NEWS_ENABLED).toBool() : true;
 }
 
 quint16 Settings::getLocalRpcPort() const {
@@ -684,7 +684,7 @@ void Settings::setStartOnLoginEnabled(bool _enable) {
     if (_enable) {
       autorunFile.write("[Desktop Entry]\n");
       autorunFile.write("Type=Application\n");
-      autorunFile.write("Name=Bitcoinote Wallet\n");
+      autorunFile.write("Name=BitcoiNote Wallet\n");
       autorunFile.write(QString("Exec=%1 --minimized\n").arg(QCoreApplication::applicationFilePath()).toLocal8Bit());
       autorunFile.write("Terminal=false\n");
       autorunFile.write("Hidden=false\n");

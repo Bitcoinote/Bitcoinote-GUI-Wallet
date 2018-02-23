@@ -27,6 +27,8 @@
 #include <QStyleFactory>
 #include <QTcpServer>
 
+#include <Common/Util.h>
+
 #ifdef Q_OS_WIN
 #define NOMINMAX
 #include <Windows.h>
@@ -223,6 +225,8 @@ void WalletApplication::loadFonts() {
 }
 
 void WalletApplication::makeDataDir() {
+  Tools::createDataDirSymlinkIfNecessary();
+
   QString dataDirPath = Settings::instance().getDataDir().absolutePath();
   if (!QDir().exists(dataDirPath)) {
     QDir().mkpath(dataDirPath);

@@ -48,7 +48,7 @@ const char HIDE_BUTTON_STYLE_SHEET_TEMPLATE[] =
 }
 
 WalletSplashScreen::WalletSplashScreen(QWidget* _parent) :
-  QSplashScreen(_parent, QPixmap(":images/splash"), Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint) {
+  QSplashScreen(_parent, QPixmap(":images/splash"), Qt::X11BypassWindowManagerHint) {
   QFont font;
   font.setPixelSize(Style::FONT_LARGE);
   setFont(font);

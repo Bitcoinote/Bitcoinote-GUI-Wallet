@@ -1,2 +1,7 @@
 *~
-build/*
+/build/
+/build_*/
+/_support_files*/
+/cryptonote/
+/cryptonote
+/Wallet_*/

@@ -1,3 +1,21 @@
+Release notes 1.1.0
+
+- Change coin name to BitcoiNote - auto-create symlink for data directory so that both old and new name work (.Bitcoinote and .BitcoiNote)
+- Improve logo and splash
+- Add software update info feed
+
+Release notes 1.0.2
+
+- Fix (as good as possible) handling of paths with non-ASCII characters
+- Replace icon again
+- Remove block explorer for the moment
+- Make splash screen non-topmost to prevent covering error messages
+
+Release notes 1.0.1
+
+- Fix Windows compatibility
+- Replace icon
+
 Release notes 1.0.0
 
 Initial version

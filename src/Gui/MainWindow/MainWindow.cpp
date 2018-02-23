@@ -107,7 +107,7 @@ MainWindow::MainWindow(ICryptoNoteAdapter* _cryptoNoteAdapter, IAddressBookManag
   m_addRecipientAction(new QAction(this)), m_styleSheetTemplate(_styleSheetTemplate), m_walletStateMapper(new QDataWidgetMapper(this)),
   m_syncMovie(new QMovie(Settings::instance().getCurrentStyle().getWalletSyncGifFile(), QByteArray(), this)) {
   m_ui->setupUi(this);
-  setWindowTitle(tr("Bitcoinote Wallet %1").arg(Settings::instance().getVersion()));
+  setWindowTitle(tr("BitcoiNote Wallet %1").arg(Settings::instance().getVersion()));
   m_addRecipientAction->setObjectName("m_addRecipientAction");
   m_cryptoNoteAdapter->addObserver(this);
   m_cryptoNoteAdapter->getNodeAdapter()->getWalletAdapter()->addObserver(this);
@@ -146,6 +146,8 @@ MainWindow::MainWindow(ICryptoNoteAdapter* _cryptoNoteAdapter, IAddressBookManag
     uiItem->setTransactionPoolModel(m_transactionPoolModel);
     uiItem->setMinerModel(m_minerModel);
   }
+
+  m_ui->m_blockExplorerButton->setHidden(QString(qgetenv("ENABLE_BLOCK_EXPLORER")) != "1");
 
   if (!Settings::instance().isSystemTrayAvailable() && QSystemTrayIcon::isSystemTrayAvailable()) {
     m_ui->m_minimizeToTrayAction->deleteLater();

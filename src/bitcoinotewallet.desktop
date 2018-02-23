@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Bitcoinote Wallet
-Comment=Bitcoinote wallet
+Name=BitcoiNote Wallet
+Comment=BitcoiNote wallet
 Exec=bitcoinotewallet %U
 Terminal=false
 Type=Application
