@@ -18,6 +18,7 @@
 #include <QClipboard>
 #include <QCompleter>
 #include <QWheelEvent>
+#include <QMessageBox>
 
 #include "TransferFrame.h"
 #include "Settings/Settings.h"
@@ -182,6 +183,7 @@ void TransferFrame::setBigTransactionError(bool _error) {
     m_ui->m_amountTextLabel->setText(tr("TRANSACTION IS TOO BIG"));
     connect(m_ui->m_sendAmountSpin, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this,
       &TransferFrame::validateAmount, Qt::UniqueConnection);
+    QMessageBox::warning(this, tr("Warning"), tr("Your transaction cannot be sent because its data size is too big. A transaction needs to reference all inputs (i.e. spent coins), so a popular cause for too big a transaction is spending a large amount using small inputs (e.g. mining rewards). You can try reducing the privacy level and/or send multiple smaller transactions."));
   } else {
     m_ui->m_amountTextLabel->setText(tr("AMOUNT"));
   }

@@ -38,6 +38,7 @@ public:
   bool hasMinimizedOption() const;
   bool hasAllowLocalIpOption() const;
   bool hasHideMyPortOption() const;
+  bool hasNoDefaultSeedsOption() const;
   QString getErrorText() const;
   QString getHelpText() const;
   QString getP2pBindIp() const;
@@ -64,6 +65,7 @@ private:
   QCommandLineOption m_addExclusiveNodeOption;
   QCommandLineOption m_seedNodeOption;
   QCommandLineOption m_hideMyPortOption;
+  QCommandLineOption m_noDefaultSeedsOption;
   QCommandLineOption m_dataDirOption;
   QCommandLineOption m_minimized;
 };

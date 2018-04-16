@@ -8,6 +8,7 @@ WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 OUTPUT_VARIABLE GIT_REVISION)
 
 set(CRYPTONOTE_LIB cryptonote)
+set(WITH_MD_LIBRARY ON)
 
 include_directories(${CMAKE_BINARY_DIR}
   src
@@ -31,6 +32,10 @@ if(WIN32)
 else(WIN32)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif(WIN32)
+
+if(PORTABLE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=nehalem")
+endif()
 
 find_package(Boost 1.58 REQUIRED COMPONENTS date_time filesystem program_options regex serialization system thread chrono)
 if ((${Boost_MAJOR_VERSION} EQUAL 1) AND (${Boost_MINOR_VERSION} EQUAL 54))

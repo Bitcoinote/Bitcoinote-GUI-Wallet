@@ -1,0 +1,5 @@
+# Text files with fixed EOL requirements
+*.bat     text eol=crlf
+*.rc      text eol=crlf
+*.sh      text eol=lf
+

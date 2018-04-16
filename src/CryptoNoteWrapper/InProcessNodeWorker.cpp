@@ -69,6 +69,7 @@ CryptoNote::NetNodeConfig makeNetNodeConfig() {
   boost::any p2pAllowLocalIp = Settings::instance().hasAllowLocalIpOption();
   std::string dataDir = Settings::instance().getDataDir().absolutePath().toLocal8Bit().constData();
   boost::any hideMyPort = Settings::instance().hasHideMyPortOption();
+  boost::any noDefaultSeeds = Settings::instance().hasNoDefaultSeedsOption();
   options.insert(std::make_pair("p2p-bind-ip", boost::program_options::variable_value(p2pBindIp, false)));
   options.insert(std::make_pair("p2p-bind-port", boost::program_options::variable_value(p2pBindPort, false)));
   options.insert(std::make_pair("p2p-external-port", boost::program_options::variable_value(p2pExternalPort, false)));
@@ -94,6 +95,7 @@ CryptoNote::NetNodeConfig makeNetNodeConfig() {
   }
 
   options.insert(std::make_pair("hide-my-port", boost::program_options::variable_value(hideMyPort, false)));
+  options.insert(std::make_pair("no-default-seeds", boost::program_options::variable_value(noDefaultSeeds, false)));
   options.insert(std::make_pair("data-dir", boost::program_options::variable_value(dataDir, false)));
   config.init(options);
   config.setTestnet(Settings::instance().isTestnet());

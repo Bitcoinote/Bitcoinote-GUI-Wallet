@@ -45,6 +45,7 @@ public:
   bool hasDebugOption() const;
   bool hasAllowLocalIpOption() const;
   bool hasHideMyPortOption() const;
+  bool hasNoDefaultSeedsOption() const;
   bool isEncrypted() const;
   bool isMiningOnLockedScreenEnabled(bool _defaultValue) const;
   bool isSystemTrayAvailable() const;
