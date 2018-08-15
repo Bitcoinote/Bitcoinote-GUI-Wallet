@@ -129,6 +129,7 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/src/WalletLegacy/WalletUnconfirmedTransactions.cpp
   cryptonote/src/WalletLegacy/WalletUserTransactionsCache.cpp
   cryptonote/src/System/ContextGroup.cpp
+  cryptonote/src/System/ContextGroupTimeout.cpp
   cryptonote/src/System/Event.cpp
   cryptonote/src/System/EventLock.cpp
   cryptonote/src/System/InterruptedException.cpp
@@ -202,8 +203,8 @@ elseif (UNIX)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -maes -D_DARWIN_C_SOURCE")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework Cocoa -framework OpenGL -framework CoreFoundation -framework Carbon -framework IOKit -L/usr/lib")
 
-    set(MACOSX_BUNDLE_ICON_FILE cryptonote.icns)
-    set(APPLICATION_ICON src/images/cryptonote.icns)
+    set(MACOSX_BUNDLE_ICON_FILE bitcoinote.icns)
+    set(APPLICATION_ICON src/images/bitcoinote.icns)
     set_source_files_properties(${APPLICATION_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
     set(BUILD_PLATFORM MACOSX_BUNDLE)
