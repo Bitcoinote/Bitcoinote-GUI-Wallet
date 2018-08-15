@@ -105,6 +105,11 @@ To build, open the `CMakeLists.txt` in QtCreator. Also you can turn on `PORTABLE
 
 The resulting package `Bitcoinote.app` can be found in `build` directory which will be created.
 
+To build `.dmg` file we recommend to use [node-appdmg](https://github.com/LinusU/node-appdmg) project.
+Just place the `BitcoinoteDmg.json`, `Bitcoinote.icns` and `Bitcoinote.app` in one directory and run the following command:
+
+`$ appdmg BitcoinoteDmg.json Bitcoinote.dmg`
+
 ## Usage Notes
 
 To run the GUI wallet, the BitcoiNote Core daemon is not required to run. If a daemon already runs, it will be used - otherwise the wallet will use its own "internal daemon" instead.

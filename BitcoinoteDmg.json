@@ -1,0 +1,17 @@
+{
+  "title": "Bitcoinote",
+  "icon": "Bitcoinote.icns",
+  "format": "UDZO",
+  "icon-size": 128,
+  "background-color": "#DCDCDC",
+  "window": {
+    "size": {
+      "width": 600,
+      "height": 400
+    }
+  },
+  "contents": [
+    { "x": 450, "y": 150, "type": "link", "path": "/Applications" },
+    { "x": 150, "y": 150, "type": "file", "path": "Bitcoinote.app" }
+  ]
+}
