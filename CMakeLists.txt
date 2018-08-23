@@ -46,6 +46,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
 set(VERSION "")
+set(PROJECT_VERSION "1.2.1")
 configure_file("cryptonote/src/version.h.in" "version.h")
 configure_file("src/CryptoNoteWalletConfig.h.in" "CryptoNoteWalletConfig.h")
 
@@ -129,6 +130,7 @@ file(GLOB_RECURSE CRYPTONOTE_SOURCES
   cryptonote/src/WalletLegacy/WalletUnconfirmedTransactions.cpp
   cryptonote/src/WalletLegacy/WalletUserTransactionsCache.cpp
   cryptonote/src/System/ContextGroup.cpp
+  cryptonote/src/System/ContextGroupTimeout.cpp
   cryptonote/src/System/Event.cpp
   cryptonote/src/System/EventLock.cpp
   cryptonote/src/System/InterruptedException.cpp
@@ -189,10 +191,10 @@ elseif (UNIX)
     set(SOURCES ${SOURCES} ${OBJC_SOURCES})
     set(PLATFORM_DIR OSX)
     set(MACOSX_BUNDLE_INFO_STRING "Cryptonote GUI wallet")
-    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VERSION_VERSION}.${VERSION_MINOR}.${VERSION_PATCH}")
     set(MACOSX_BUNDLE_BUNDLE_NAME CryptonoteWallet)
-    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VERSION_VERSION}.${VERSION_MINOR}.${VERSION_PATCH}")
-    set(MACOSX_BUNDLE_BUNDLE_VERSION "$${VERSION_VERSION}.${VERSION_MINOR}.${VERSION_PATCH}")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
 
     find_package(Qt5PrintSupport REQUIRED)
 
@@ -202,8 +204,8 @@ elseif (UNIX)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -maes -D_DARWIN_C_SOURCE")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework Cocoa -framework OpenGL -framework CoreFoundation -framework Carbon -framework IOKit -L/usr/lib")
 
-    set(MACOSX_BUNDLE_ICON_FILE cryptonote.icns)
-    set(APPLICATION_ICON src/images/cryptonote.icns)
+    set(MACOSX_BUNDLE_ICON_FILE bitcoinote.icns)
+    set(APPLICATION_ICON src/images/bitcoinote.icns)
     set_source_files_properties(${APPLICATION_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
     set(BUILD_PLATFORM MACOSX_BUNDLE)
@@ -211,6 +213,11 @@ elseif (UNIX)
 
     GET_TARGET_PROPERTY(QT_LIB_DIR "${Qt5Widgets_LIBRARIES}" LOCATION)
     GET_FILENAME_COMPONENT(QT_LIB_DIR "${QT_LIB_DIR}" PATH)
+
+    ADD_CUSTOM_COMMAND(
+      TARGET ${PROJECT_NAME} PRE_BUILD
+      COMMAND macdeployqt ${PROJECT_NAME}.app
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
   else(APPLE)
 
