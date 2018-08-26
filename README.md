@@ -104,6 +104,11 @@ ln -s ../Bitcoinote-Core cryptonote
 To build, open the `CMakeLists.txt` in QtCreator. Also you can turn on `PORTABLE` flag in the project settings tab.
 
 The resulting package `Bitcoinote.app` can be found in `build` directory which will be created.
+In order to run it on other machines you should run the following command:
+
+`$ macdeployqt Bitcoinote.app`
+
+This command will find all required dependencies and copy them into the `Bitcoinote.app` directory.
 
 To build `.dmg` file we recommend to use [node-appdmg](https://github.com/LinusU/node-appdmg) project.
 Just place the `BitcoinoteDmg.json`, `Bitcoinote.icns` and `Bitcoinote.app` in one directory and run the following command:
