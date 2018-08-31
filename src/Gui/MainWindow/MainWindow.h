@@ -22,6 +22,7 @@
 #include "IApplicationEventHandler.h"
 #include "ICryptoNoteAdapter.h"
 #include "IWalletAdapter.h"
+#include "Settings/Settings.h"
 
 class QActionGroup;
 class QDataWidgetMapper;
@@ -43,7 +44,7 @@ class IMiningManager;
 class INewsReader;
 
 class MainWindow : public QMainWindow, public IWalletAdapterObserver, public IApplicationEventHandlerObserver,
-  public ICryptoNoteAdapterObserver {
+  public ICryptoNoteAdapterObserver, public ISettingsObserver {
   Q_OBJECT
   Q_DISABLE_COPY(MainWindow)
 
@@ -75,6 +76,9 @@ public:
   // ICryptoNoteAdapterObserver
   Q_SLOT virtual void cryptoNoteAdapterInitCompleted(int _status) override;
   Q_SLOT virtual void cryptoNoteAdapterDeinitCompleted() override;
+
+  // ISettingsObserver
+  Q_SLOT virtual void settingsUpdated() override;
 
 protected:
   void changeEvent(QEvent* _event) override;
@@ -115,6 +119,7 @@ private:
   void addRecipientTriggered();
   void commitData(QSessionManager& _manager);
   void walletStateModelDataChanged(const QModelIndex& _topLeft, const QModelIndex& _bottomRight, const QVector<int>& _roles);
+  void updateWindowTitle();
 
   Q_SLOT void createWallet();
   Q_SLOT void openWallet();

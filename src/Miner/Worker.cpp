@@ -20,7 +20,15 @@
 
 #include <crypto/hash.h>
 
+#include <CryptoNoteConfig.h>
+#include <CryptoNoteCore/CachedBlock.h>
+
+#include <BlockchainExplorer/BlockchainExplorer.h>
+
 #include "Worker.h"
+#include "WalletLogger/WalletLogger.h"
+
+#include "global.h"
 
 namespace WalletGui {
 
@@ -28,9 +36,17 @@ namespace  {
   void miningRound(Job& _localJob, quint32& _localNonce, Crypto::Hash& _hash, Crypto::cn_context& _context) {
     _localJob.blob.replace(39, sizeof(_localNonce), reinterpret_cast<char*>(&_localNonce), sizeof(_localNonce));
     std::memset(&_hash, 0, sizeof(_hash));
-    Crypto::cn_slow_hash(_context, _localJob.blob.data(), _localJob.blob.size(), _hash);
+   CryptoNote::BlockDetails topBlock;
+   
+    if(WalletGui::global::getBlocks() < CryptoNote::parameters::UPGRADE_HEIGHT_V5) {
+      Crypto::cn_slow_hash_v6(_context, _localJob.blob.data(), _localJob.blob.size(), _hash);
+    } else {
+      Crypto::cn_lite_slow_hash_v1(_context, _localJob.blob.data(), _localJob.blob.size(), _hash);
+    }
+
   }
 }
+
 
 Worker::Worker(Job& _mainJob, Job& _alternateJob,
   QReadWriteLock& _mainJobLock, QReadWriteLock& _alternateJobLock,

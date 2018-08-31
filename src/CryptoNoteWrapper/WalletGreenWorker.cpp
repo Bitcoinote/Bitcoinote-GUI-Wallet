@@ -32,6 +32,8 @@
 #include "Wallet/WalletGreen.h"
 #include "Wallet/WalletErrors.h"
 
+#include "global.h"
+
 namespace WalletGui {
 
 namespace {
@@ -823,6 +825,7 @@ void WalletGreenWorker::processEvent(const CryptoNote::WalletEvent& _event) {
         arg(_event.synchronizationProgressUpdated.totalBlockCount));
       Q_EMIT synchronizationProgressUpdatedSignal(_event.synchronizationProgressUpdated.processedBlockCount,
         _event.synchronizationProgressUpdated.totalBlockCount);
+      WalletGui::global::setBlocks(_event.synchronizationProgressUpdated.totalBlockCount);
       break;
     case CryptoNote::WalletEventType::SYNC_COMPLETED:
       WalletLogger::debug("[Wallet] Event: Wallet synchronized");

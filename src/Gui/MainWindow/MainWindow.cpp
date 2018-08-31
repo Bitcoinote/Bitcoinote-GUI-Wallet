@@ -107,7 +107,10 @@ MainWindow::MainWindow(ICryptoNoteAdapter* _cryptoNoteAdapter, IAddressBookManag
   m_addRecipientAction(new QAction(this)), m_styleSheetTemplate(_styleSheetTemplate), m_walletStateMapper(new QDataWidgetMapper(this)),
   m_syncMovie(new QMovie(Settings::instance().getCurrentStyle().getWalletSyncGifFile(), QByteArray(), this)) {
   m_ui->setupUi(this);
-  setWindowTitle(tr("BitcoiNote Wallet %1").arg(Settings::instance().getVersion()));
+  Settings::instance().addObserver(this);
+
+  updateWindowTitle();
+
   m_addRecipientAction->setObjectName("m_addRecipientAction");
   m_cryptoNoteAdapter->addObserver(this);
   m_cryptoNoteAdapter->getNodeAdapter()->getWalletAdapter()->addObserver(this);
@@ -200,6 +203,19 @@ MainWindow::MainWindow(ICryptoNoteAdapter* _cryptoNoteAdapter, IAddressBookManag
 }
 
 MainWindow::~MainWindow() {
+}
+
+void MainWindow::updateWindowTitle() {
+  QString walletFile = Settings::instance().getWalletFile();
+  if (walletFile.isEmpty() || walletFile.isNull()) {
+    setWindowTitle(tr("BitcoiNote Wallet %1").arg(Settings::instance().getVersion()));
+  } else {
+    setWindowTitle(tr("BitcoiNote Wallet %1 - %2").arg(Settings::instance().getVersion()).arg(QFileInfo(walletFile).absoluteFilePath()));
+  }
+}
+
+void MainWindow::settingsUpdated() {
+  updateWindowTitle();
 }
 
 bool MainWindow::eventFilter(QObject* _object, QEvent* _event) {
@@ -623,24 +639,43 @@ void MainWindow::saveWalletKeys() {
 }
 
 void MainWindow::resetWallet() {
-  QuestionDialog dlg(tr("Reset wallet?"), tr("Reset wallet to resynchronize its transactions and balance based\n"
-    "on the blockchain data. This operation can take some time.\n"
-    "Are you sure you would like to reset this wallet?"), this);
+  QuestionDialog dlg(tr("Reset wallet?"), tr("Reset wallet to resynchronize its transactions and balance based on the\nblockchain data. This operation can take some time. A backup file will\nbe created automatically. Are you sure you would like to reset this wallet?"), this);
   if (dlg.exec() != QDialog::Accepted) {
     return;
   }
 
   IWalletAdapter* walletAdapter = m_cryptoNoteAdapter->getNodeAdapter()->getWalletAdapter();
   Q_ASSERT(walletAdapter->isOpen());
-  QString fileName = Settings::instance().getWalletFile();
-  QDateTime currenctDateTime = QDateTime::currentDateTime();
-  fileName.append(QString(".%1.backup").arg(currenctDateTime.toString("yyyyMMddHHMMss")));
 
-  walletAdapter->save(CryptoNote::WalletSaveLevel::SAVE_KEYS_ONLY, true);
+  // Get account keys
+  AccountKeys accountKeys = m_cryptoNoteAdapter->getNodeAdapter()->getWalletAdapter()->getAccountKeys(0);
+
+  // Get filename
+  QString fileName = Settings::instance().getWalletFile();
+
+  // Save and close
+  walletAdapter->save(CryptoNote::WalletSaveLevel::SAVE_ALL, true);
   walletAdapter->removeObserver(this);
   walletAdapter->close();
   walletAdapter->addObserver(this);
-  m_ui->m_noWalletFrame->openWallet(Settings::instance().getWalletFile(), QString());
+
+  // Create backup
+  QDateTime currentDateTime = QDateTime::currentDateTime();
+  QString backupFileName = fileName;
+  backupFileName.append(QString(".%1.backup").arg(currentDateTime.toString("yyyyMMddHHMMss")));
+  QFile::rename(fileName, backupFileName);
+
+  Settings::instance().setWalletFile(fileName);
+
+  if (walletAdapter->createWithKeys(fileName, accountKeys) == IWalletAdapter::INIT_SUCCESS) {
+    walletAdapter->save(CryptoNote::WalletSaveLevel::SAVE_ALL, true);
+
+    QMessageBox::information(this, tr("Wallet reset"),
+      tr("Your wallet has been reset! Please allow some time for it to synchronize again.\n\nA backup file (%1) has been created.").arg(QFileInfo(backupFileName).fileName()));
+  } else {
+    QMessageBox::critical(this, tr("Error"),
+      tr("Failed to recreate wallet file %1 - please restore from backup file %2!").arg(QFileInfo(fileName).fileName()).arg(QFileInfo(backupFileName).fileName()));
+  }
 }
 
 void MainWindow::encryptWallet() {
